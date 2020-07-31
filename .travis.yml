@@ -46,6 +46,6 @@ jobs:
     - stage: "Tutorials tests"
       script:
         - cd pkg/gems; gem install eyes_selenium; cd ../..
-        - mkdir tutorials && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git
-        - cd tutorials/tutorial-selenium-ruby-basic
+        - mkdir tutorials && cd tutorials && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git
+        - cd tutorial-selenium-ruby-basic
         - ruby simple_test_script.rb
