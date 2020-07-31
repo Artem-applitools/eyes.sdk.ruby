@@ -38,44 +38,13 @@ jobs:
   include:
     - stage: "Unit Tests"
       name: "Unit Tests"
-      script: bundle exec rake travis:unit_tests
-    - stage: "Visual tests"
-      script: bundle exec rake travis:vg_tests
-      name: "Visual Grid"
-    - script: bundle exec rake travis:appium_tests
-      name: "eyes_appium tests"
+      script: bundle exec rake unit_tests:travis
     - stage: "Ruby Coverage tests"
       name: "Ruby Coverage tests"
       script: yarn ruby:prod
-    - stage: "Report all test results"
-      if: branch = master AND type = cron
-      name: "Report all test results"
+    - stage: "Tutorials tests"
       script:
-        - echo "v$SDK_VERSION $CHANGELOG"
-        - echo $TMP_CHANGELOG
-        - COMMITTER_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
-        - if [[ ("$ALLOWED_RELEASE_COMMITERS" =~ .*"$COMMITTER_EMAIL".*) && $TMP_CHANGELOG ]]; then
-            echo "REPORTING...";
-            TEST_COVERAGE_GAP=$(cat testCoverageGap.txt);
-            bash ./all_tests_report.sh "$SDK" "$COMMITER_EMAIL";
-            echo "REPORTED SUCCESSFULLY";
-          else
-            echo "REPORT FAILED";
-            exit 1;
-          fi
-    - stage: "Build"
-      if: tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ AND fork == false
-      name: "Release event"
-      script:
-        - echo "v$SDK_VERSION $CHANGELOG"
-        - echo $TMP_CHANGELOG
-        - COMMITTER_EMAIL="$(git log -1 $TRAVIS_COMMIT --pretty="%cE")"
-        - if [[ ("$ALLOWED_RELEASE_COMMITERS" =~ .*"$COMMITTER_EMAIL".*) && $TMP_CHANGELOG ]]; then
-            echo "DEPLOY";
-            TEST_COVERAGE_GAP=$(cat testCoverageGap.txt);
-            bash ./sendMail.sh "$SDK" "$TRAVIS_TAG" "$CHANGELOG" "$TEST_COVERAGE_GAP";
-            echo "DEPLOY SUCCESSFUL";
-          else
-            echo "DEPLOYMENT FAILED";
-            exit 1;
-          fi
+        - cd pkg/gems; gem install eyes_selenium; cd ../..
+        - mkdir tutorials && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git
+        - cd tutorials/tutorial-selenium-ruby-basic
+        - ruby simple_test_script.rb

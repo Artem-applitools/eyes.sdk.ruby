@@ -7,6 +7,7 @@ module Applitools
         server_url = options.delete(:server_url)
         server_url = args.first unless server_url
         runner = options.delete(:visual_grid_runner) || options.delete(:runner)
+        puts 'From tested'
         if runner.is_a? Applitools::Selenium::VisualGridRunner
           super Applitools::Selenium::VisualGridEyes.new(runner, server_url)
         else
