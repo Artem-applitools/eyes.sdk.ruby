@@ -37,14 +37,15 @@ before_script:
     fi
 jobs:
   include:
-    - stage: "Unit Tests"
-      name: "Unit Tests"
-      script: bundle exec rake unit_tests:travis
-    - stage: "Ruby Coverage tests"
-      name: "Ruby Coverage tests"
-      script: yarn ruby:prod
+#    - stage: "Unit Tests"
+#      name: "Unit Tests"
+#      script: bundle exec rake unit_tests:travis
+#    - stage: "Ruby Coverage tests"
+#      name: "Ruby Coverage tests"
+#      script: yarn ruby:prod
     - stage: "Tutorials tests"
       script:
+        - yarn add global chromedriver
         - cd pkg/gems; gem install eyes_selenium; cd ../..
         - mkdir tutorials && cd tutorials && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git
         - cd tutorial-selenium-ruby-basic
