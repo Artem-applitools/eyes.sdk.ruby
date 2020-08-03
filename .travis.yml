@@ -49,8 +49,8 @@ jobs:
         - curl "https://chromedriver.storage.googleapis.com/${LATEST_CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O
         - unzip chromedriver_linux64.zip -d ~/bin
         - mkdir tutorials && cd tutorials && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git
-#        - cd tutorial-selenium-ruby-basic
-#        - bundle install
-#        - bundle package
-#        - cp -a ../../pkg/gems/. ./vendor/cache
+        - cd tutorial-selenium-ruby-basic
+        - bundle install --retry=3
+        - bundle package --retry=3
+        - cp -a ../../pkg/gems/. ./vendor/cache
         - bundle exec ruby simple_test_script.rb
