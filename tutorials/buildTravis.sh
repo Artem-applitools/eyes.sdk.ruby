@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo $(pwd)
 ls
 cp -a ./pkg/gems/. ./tutorials/gems
 docker build -t chrome_ruby -f tutorials/Dockerfile .
