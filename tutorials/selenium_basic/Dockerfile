@@ -1,4 +1,4 @@
-FROM chrome_ruby:latest
+FROM artemqaapplitools/chrome_ruby:latest
 
 RUN cd home/project \
     && git clone https://github.com/applitools/tutorial-selenium-ruby-basic.git \
