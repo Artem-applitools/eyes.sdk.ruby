@@ -5,11 +5,11 @@ RUN cd home/project \
     && cd tutorial-selenium-ruby-basic \
     && bundle install
 
-COPY ./gems/. gems/
+COPY ./tutorials/gems/. gems/
 
 RUN cd gems \
     && gem install eyes_core \
     && gem install eyes_selenium
 
-COPY ./selenium_basic/start.sh /
+COPY ./tutorials/selenium_basic/start.sh /
 CMD ["/start.sh"]
