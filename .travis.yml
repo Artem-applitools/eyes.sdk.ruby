@@ -45,7 +45,5 @@ jobs:
 #      script: yarn ruby:prod
     - stage: "Tutorials tests"
       script:
-        - ls pkg
-        - ls pkg/gems
-        - ./tutorials/build.sh
+        - ./tutorials/buildTravis.sh
         - ./tutorials/checkTutorials.sh
