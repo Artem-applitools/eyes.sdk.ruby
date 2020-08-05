@@ -5,11 +5,11 @@ RUN cd home/project \
     && cd tutorial-selenium-ruby-ultrafastgrid \
     && bundle install
 
-COPY ./gems/. gems/
+COPY ./tutorials/gems/. gems/
 
 RUN cd gems \
     && gem install eyes_core \
     && gem install eyes_selenium
 
-COPY ./selenium_ufg/start.sh /
+COPY ./tutorials/selenium_ufg/start.sh /
 CMD ["/start.sh"]
