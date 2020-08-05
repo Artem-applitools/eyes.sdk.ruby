@@ -11,7 +11,7 @@ branches:
   only:
     - master
     - develop
-    - local_travis_docker
+    - local_travis_check
     - /^v[0-9]+\.[0-9]+.[0-9]+$/
 before_install:
   - gem install builder
