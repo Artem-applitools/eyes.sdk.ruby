@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 require 'eyes_selenium'
+require 'eyes_appium'
 require 'logger'
+SAUCE_SERVER_URL = 'https://ondemand.saucelabs.com:443/wd/hub'
+SAUCE_CREDENTIALS = {
+  username: ENV['SAUCE_USERNAME'],
+  accessKey: ENV['SAUCE_ACCESS_KEY']
+}.freeze
+DEVICES = {
+  'Samsung Galaxy S8' => {
+    browserName: '',
+    name: 'Android Demo',
+    platformName: 'Android',
+    platformVersion: '7.0',
+    appiumVersion: '1.9.1',
+    deviceName: 'Samsung Galaxy S8 FHD GoogleAPI Emulator',
+    automationName: 'uiautomator2'
+  }.merge(SAUCE_CREDENTIALS)
+}.freeze
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -16,7 +33,7 @@ RSpec.configure do |config|
     is_css_stitching = false if is_css_stitching.nil?
     branch_name = 'master' if branch_name.nil?
     runner = Applitools::Selenium::VisualGridRunner.new(10) if is_visual_grid
-    eyes = Applitools::Selenium::Eyes.new(runner: runner)
+    eyes = Applitools::Appium::Eyes.new(runner: runner)
     eyes.configure do |conf|
       conf.stitch_mode = Applitools::STITCH_MODE[:css] if is_css_stitching
       # conf.batch = $run_batch
@@ -30,6 +47,16 @@ RSpec.configure do |config|
     puts ENV['APPLITOOLS_SHOW_LOGS']
     eyes.log_handler = Logger.new(STDOUT) if ENV.key?('APPLITOOLS_SHOW_LOGS')
     eyes
+  end
+
+  def driver(env:)
+    driver = if env.nil?
+               Selenium::WebDriver.for :remote, :desired_capabilities => :chrome
+             else
+               caps = { app: env["app"] }.merge(DEVICES[env["device"]])
+               Selenium::WebDriver.for :remote, url: SAUCE_SERVER_URL, desired_capabilities: caps
+             end
+    driver
   end
 
 end

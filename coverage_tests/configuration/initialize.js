@@ -12,7 +12,7 @@ function initialize(options) {
 
   tracker.storeHook(
       'beforeEach',
-      driverBuild(options.capabilities, options.host),
+      ruby`@driver = driver(env: ${options.env ? {hash:options.env, isHash: true} : undefined})`,
   )
 
   tracker.storeHook(
@@ -127,10 +127,11 @@ function initialize(options) {
 
   const eyes = {
     open({appName, viewportSize}) {
+      const size = viewportSize? `
+      conf.viewport_size = Applitools::RectangleSize.new(${viewportSize.width}, ${viewportSize.height})` : ''
       tracker.storeCommand(ruby`@eyes.configure do |conf|
       conf.app_name = ${appName}
-      conf.test_name =  ${options.baselineTestName}
-      conf.viewport_size = Applitools::RectangleSize.new(${viewportSize.width}, ${viewportSize.height})
+      conf.test_name =  ${options.baselineTestName}`+ size +`
     end
     @eyes.open(driver: @driver)`)
     },

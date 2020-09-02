@@ -57,6 +57,12 @@ function ruby(chunks, ...values) {
         let stringified = '';
         if (value && value.isRef) {
             stringified = value.ref()
+        } else if (value && value.isHash) {
+            console.log(value)
+            stringified = JSON.stringify(value.hash)
+                .replace(/":"/g, '" => "')
+                .replace(/,/g, ', ')
+                .replace(/"/g, `'`)
         } else if (typeof value === 'function') {
             stringified = value.toString()
         } else if (typeof value === 'undefined' || value === null) {
