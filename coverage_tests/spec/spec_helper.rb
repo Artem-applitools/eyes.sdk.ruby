@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'eyes_selenium'
+# require 'eyes_selenium'
 require 'eyes_appium'
 require 'logger'
 SAUCE_SERVER_URL = 'https://ondemand.saucelabs.com:443/wd/hub'
@@ -15,7 +15,15 @@ DEVICES = {
     platformVersion: '7.0',
     appiumVersion: '1.9.1',
     deviceName: 'Samsung Galaxy S8 FHD GoogleAPI Emulator',
-    automationName: 'uiautomator2'
+    automationName: 'uiautomator2',
+    idleTimeout: 60
+  }.merge(SAUCE_CREDENTIALS),
+  'iPhone XS Simulator' => {
+    browserName: '',
+    name: 'iOS Native Demo',
+    deviceName: 'iPhone XS Simulator',
+    platformName: 'iOS',
+    platformVersion: '13.2'
   }.merge(SAUCE_CREDENTIALS)
 }.freeze
 RSpec.configure do |config|
@@ -28,12 +36,13 @@ RSpec.configure do |config|
   end
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  def eyes(is_visual_grid:, is_css_stitching:, branch_name:)
+  def eyes(is_visual_grid:, is_css_stitching:, is_mobile:, branch_name:)
     is_visual_grid = false if is_visual_grid.nil?
     is_css_stitching = false if is_css_stitching.nil?
+    is_mobile = false if is_mobile.nil?
     branch_name = 'master' if branch_name.nil?
     runner = Applitools::Selenium::VisualGridRunner.new(10) if is_visual_grid
-    eyes = Applitools::Appium::Eyes.new(runner: runner)
+    eyes = is_mobile ? Applitools::Appium::Eyes.new(runner: runner) : Applitools::Selenium::Eyes.new(runner: runner)
     eyes.configure do |conf|
       conf.stitch_mode = Applitools::STITCH_MODE[:css] if is_css_stitching
       # conf.batch = $run_batch
@@ -50,12 +59,14 @@ RSpec.configure do |config|
   end
 
   def driver(env:)
-    driver = if env.nil?
-               Selenium::WebDriver.for :remote, :desired_capabilities => :chrome
-             else
-               caps = { app: env["app"] }.merge(DEVICES[env["device"]])
-               Selenium::WebDriver.for :remote, url: SAUCE_SERVER_URL, desired_capabilities: caps
-             end
+    if env.nil?
+      driver = Selenium::WebDriver.for :remote, :desired_capabilities => :chrome
+    else
+      caps = { app: env['app'] }.merge(DEVICES[env['device']])
+      # driver = Selenium::WebDriver.for :remote, url: SAUCE_SERVER_URL, desired_capabilities: caps
+      driver = Appium::Driver.new({ caps: caps, appium_lib: { server_url: SAUCE_SERVER_URL } }, false)
+      driver.start_driver
+    end
     driver
   end
 

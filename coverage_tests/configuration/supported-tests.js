@@ -1,6 +1,6 @@
 module.exports =  [
     {name: 'TestAcmeLogin', executionMode: {isVisualGrid: true}},
-    /*{name: 'TestAcmeLogin', executionMode: {isCssStitching: true}, disabled: true},
+    {name: 'TestAcmeLogin', executionMode: {isCssStitching: true}, disabled: true},
     {name: 'TestAcmeLogin', executionMode: {isScrollStitching: true}, disabled: true},
     {name: 'TestCheckElementFully_Fluent', executionMode: {isVisualGrid: true}},
     {name: 'TestCheckElementFully_Fluent', executionMode: {isCssStitching: true}},
@@ -313,7 +313,12 @@ module.exports =  [
     {name: 'TestScrollableModal_Fully', executionMode: {isScrollStitching: true}},
     {name: 'TestScrollableContentInModal_Fully', executionMode: {isCssStitching: true}, disabled: true},
     {name: 'TestScrollableContentInModal_Fully', executionMode: {isScrollStitching: true}, disabled: true},
-    {name: 'TestWindowWithModal_Fully', executionMode: {isScrollStitching: true}, disabled: true},*/
-    // {name: 'TestTooBigViewportSize', executionMode: {isCssStitching: true}},
+    {name: 'TestWindowWithModal_Fully', executionMode: {isScrollStitching: true}, disabled: true},
+    {name: 'TestTooBigViewportSize', executionMode: {isCssStitching: true}},
     {name: 'Appium_Android_CheckRegion', executionMode: {isCssStitching: true}},
+    {name: 'Appium_Android_CheckRegionWithIgnoreRegion', executionMode: {isCssStitching: true}},
+    {name: 'Appium_Android_CheckWindow', executionMode: {isCssStitching: true}},
+    {name: 'Appium_iOS_CheckWindow', executionMode: {isCssStitching: true}},
+    {name: 'Appium_iOS_CheckRegionWithIgnoreRegion', executionMode: {isCssStitching: true}},
+    {name: 'Appium_iOS_CheckRegion', executionMode: {isCssStitching: true}},
 ]
