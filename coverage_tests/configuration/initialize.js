@@ -4,10 +4,15 @@ const {checkSettingsParser, ruby, SELECTOR_TYPES} = require('./parser')
 
 function initialize(options) {
   const tracker = makeEmitTracker()
-  const isMobile = options.env && options.env.device
+  const isMobile = !!(options.env && options.env.device)
   tracker.addSyntax('var', ({name, value}) => `${name} = ${value}`)
   tracker.addSyntax('getter', ({target, key}) => `${target}${key.startsWith('get') ? `.${key.slice(3).toLowerCase()}` : `["${key}"]`}`)
   tracker.addSyntax('call', ({target, args}) => args.length > 0 ? `${target}(${args.map(val => JSON.stringify(val)).join(", ")})` : `${target}`)
+
+  tracker.storeHook(
+      'deps',
+      `require '${isMobile? 'eyes_appium' : 'eyes_selenium'}'`
+  )
 
   tracker.storeHook(
       'beforeEach',
