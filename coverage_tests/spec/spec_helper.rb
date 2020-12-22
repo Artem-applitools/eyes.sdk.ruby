@@ -3,6 +3,7 @@ require 'eyes_selenium'
 require 'test_utils/obtain_actual_app_output'
 require 'logger'
 RSpec.configure do |config|
+  include Applitools::TestUtils::ObtainActualAppOutput
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
